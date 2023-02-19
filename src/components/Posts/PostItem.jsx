@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import moment from "moment";
 import {AiOutlineDelete} from "react-icons/ai";
 import {BsChat, BsDot} from "react-icons/bs";
@@ -11,10 +11,43 @@ import {
     IoArrowUpCircleSharp,
     IoBookmarkOutline
 } from "react-icons/io5";
-import {Flex, Icon, Image, Stack, Text} from "@chakra-ui/react";
+import {
+    Alert, AlertIcon,
+    Flex,
+    Icon,
+    Image,
+    Skeleton,
+    Spinner,
+    Stack,
+    Text
+} from "@chakra-ui/react";
 
 
-const PostItem = ({post, onVote, onDeletePost, onSelectedPost, userIsCreator, userVoteValue}) => {
+const PostItem = ({
+                      post,
+                      onVote,
+                      onDeletePost,
+                      onSelectedPost,
+                      userIsCreator,
+                      userVoteValue
+                  }) => {
+    const [loadingImage, setLoadingImage] = useState(true);
+    const [loadingDelete, setLoadingDelete] = useState(false);
+    const [error, setError] = useState('');
+    const handleDelete = async () => {
+        setLoadingDelete(true);
+        try {
+            const success = await onDeletePost(post);
+
+            if (!success) {
+                throw new Error('Failed to delete post')
+            }
+            console.log('post deleted successfully')
+        } catch (error) {
+            setError(error.message)
+        }
+        setLoadingDelete(false);
+    }
     return (
         <Flex
             border='1px solid'
@@ -57,11 +90,22 @@ const PostItem = ({post, onVote, onDeletePost, onSelectedPost, userIsCreator, us
                 direction='column'
                 width='100%'
             >
+                {
+                    error && (
+                        <Alert
+                            status="error"
+                        >
+                            <AlertIcon/>
+                            <Text mr={2}>{error}</Text>
+                        </Alert>
+                    )
+                }
                 <Stack spacing={1} p='10px'>
                     <Stack direction='row' spacing={0.6} align='center' fontSize='9pt'>
                         {/*Home Page Check*/}
 
-                        <Text>Posted by u/{post.creatorDisplayName} {moment(new Date(post.createdAt?.seconds * 1000)).fromNow()}</Text>
+                        <Text>Posted by
+                            u/{post.creatorDisplayName}{" "} {moment(new Date(post.createdAt?.seconds * 1000)).fromNow()}</Text>
                     </Stack>
 
                     <Text
@@ -74,8 +118,23 @@ const PostItem = ({post, onVote, onDeletePost, onSelectedPost, userIsCreator, us
                     {
                         post.imageURL && (
                             <Flex justify='center' align='center' p={2}>
-                                <Image src={post.imageURL} maxHeight='460px' alt='post image'/>
+                                {
+                                    loadingImage && (
+                                        <Skeleton
+                                            height='200px'
+                                            width='100%'
+                                            borderRadius={4}
+                                        />
+                                    )
+                                }
 
+                                <Image
+                                    src={post.imageURL}
+                                    maxHeight='460px'
+                                    alt='post image'
+                                    display={loadingImage ? 'none' : ''}
+                                    onLoad={() => setLoadingImage(false)}
+                                />
                             </Flex>
                         )
                     }
@@ -87,13 +146,65 @@ const PostItem = ({post, onVote, onDeletePost, onSelectedPost, userIsCreator, us
                         p='8px 10px'
                         borderRadius={4}
                         _hover={{
-                            bg:'gray.200'
+                            bg: 'gray.200'
                         }}
                         cursor="pointer"
                     >
                         <Icon as={BsChat} mr={2}/>
                         <Text>{post.numberOfComments}</Text>
                     </Flex>
+
+                    <Flex
+                        align='center'
+                        p='8px 10px'
+                        borderRadius={4}
+                        _hover={{
+                            bg: 'gray.200'
+                        }}
+                        cursor="pointer"
+                    >
+                        <Icon as={IoArrowRedoOutline} mr={2}/>
+                        <Text>Share</Text>
+                    </Flex>
+
+                    <Flex
+                        align='center'
+                        p='8px 10px'
+                        borderRadius={4}
+                        _hover={{
+                            bg: 'gray.200'
+                        }}
+                        cursor="pointer"
+                    >
+                        <Icon as={IoBookmarkOutline} mr={2}/>
+                        <Text>Save</Text>
+                    </Flex>
+
+                    {
+                        userIsCreator && (
+                            <Flex
+                                align='center'
+                                p='8px 10px'
+                                borderRadius={4}
+                                _hover={{
+                                    bg: 'gray.200'
+                                }}
+                                cursor="pointer"
+                                onClick={handleDelete}
+                            >
+                                {
+                                    loadingDelete ? (
+                                        <Spinner size='sm'/>
+                                    ) : (
+                                        <>
+                                            <Icon as={AiOutlineDelete} mr={2}/>
+                                            <Text>Delete</Text>
+                                        </>
+                                    )
+                                }
+                            </Flex>
+                        )
+                    }
                 </Flex>
 
             </Flex>

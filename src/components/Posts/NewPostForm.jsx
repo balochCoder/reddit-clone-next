@@ -75,6 +75,8 @@ const NewPostForm = ({user}) => {
 
             }
 
+            router.back();
+
         } catch (error) {
             console.log("handleCreatePost error", error.message);
             setError(true)
@@ -82,7 +84,6 @@ const NewPostForm = ({user}) => {
 
         setLoading(false);
 
-        // router.back();
     }
 
     const onSelectImage = (e) => {
