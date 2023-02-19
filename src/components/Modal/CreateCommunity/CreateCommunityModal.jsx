@@ -9,7 +9,7 @@ import {
     ModalCloseButton, Button, Box, Divider, Text, Input, Stack, Checkbox, Flex, Icon,
 } from '@chakra-ui/react';
 
-import {doc, setDoc, serverTimestamp, runTransaction} from "firebase/firestore";
+import {doc, serverTimestamp, runTransaction} from "firebase/firestore";
 
 
 import {BsFillEyeFill, BsFillPersonFill} from "react-icons/bs";

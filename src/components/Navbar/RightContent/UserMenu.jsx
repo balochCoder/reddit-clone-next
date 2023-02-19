@@ -3,7 +3,7 @@ import {
     Menu,
     MenuButton,
     MenuList,
-    MenuItem, Icon, Flex, MenuDivider,Text
+    MenuItem, Icon, Flex, MenuDivider, Text
 } from '@chakra-ui/react'
 
 import {FaRedditSquare} from "react-icons/fa";
@@ -13,14 +13,20 @@ import {CgProfile} from "react-icons/cg";
 import {MdOutlineLogin} from "react-icons/md";
 import {ChevronDownIcon} from "@chakra-ui/icons";
 import {useSignOut} from "react-firebase-hooks/auth";
-import {useSetRecoilState} from "recoil";
+import {useResetRecoilState, useSetRecoilState} from "recoil";
 import {auth} from "@/firebase/clientApp";
 import {authModalState} from "@/atoms/authModalAtom";
+import {communityState} from "@/atoms/communitiesAtom";
 
 
 const UserMenu = ({user}) => {
+    const resetCommunityState = useResetRecoilState(communityState)
     const [signOut, loading, error] = useSignOut(auth);
-    const setAuthModalState = useSetRecoilState(authModalState)
+    const setAuthModalState = useSetRecoilState(authModalState);
+    const logout = async () => {
+        await signOut();
+        resetCommunityState();
+    }
     return (
         <Menu>
             <MenuButton
@@ -38,7 +44,7 @@ const UserMenu = ({user}) => {
                                     <Icon fontSize={24} mr={1} color='gray.200' as={FaRedditSquare}/>
                                     <Flex
                                         direction='column'
-                                        display={{base:'none',lg:'flex'}}
+                                        display={{base: 'none', lg: 'flex'}}
                                         fontSize='8pt'
                                         align='flex-start'
                                         mr={8}
@@ -83,7 +89,7 @@ const UserMenu = ({user}) => {
                                 fontSize='10pt'
                                 fontWeight={700}
                                 _hover={{bg: 'blue.500', color: 'white'}}
-                                onClick={() => signOut()}
+                                onClick={logout}
                             >
                                 <Flex align='center'>
                                     <Icon as={MdOutlineLogin} fontSize={20} mr={2}/>
@@ -91,7 +97,7 @@ const UserMenu = ({user}) => {
                                 </Flex>
                             </MenuItem>
                         </>
-                    ):(
+                    ) : (
                         <>
                             <MenuItem
                                 fontSize='10pt'
@@ -99,7 +105,7 @@ const UserMenu = ({user}) => {
                                 _hover={{bg: 'blue.500', color: 'white'}}
                                 onClick={() => setAuthModalState({
                                     open: true,
-                                    view:'login'
+                                    view: 'login'
                                 })}
                             >
                                 <Flex align='center'>
