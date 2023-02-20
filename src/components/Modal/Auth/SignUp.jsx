@@ -3,7 +3,7 @@ import {addDoc,collection} from "firebase/firestore";
 import {useSetRecoilState} from "recoil";
 import {Button, Flex, Input, Text} from "@chakra-ui/react";
 import {useCreateUserWithEmailAndPassword} from "react-firebase-hooks/auth";
-import {firestore} from "@/firebase/clientApp";
+import {auth, firestore} from "@/firebase/clientApp";
 import {FIREBASE_ERRORS} from "@/firebase/errors";
 import {authModalState} from "@/atoms/authModalAtom";
 
