@@ -54,7 +54,7 @@ const Posts = ({communityData}) => {
                                     key={post.id}
                                     post={post}
                                     userIsCreator={user?.uid === post.creatorId}
-                                    userVoteValue={undefined}
+                                    userVoteValue={postStateValue.postVotes.find(vote => vote.postId === post.id)?.voteValue}
                                     onVote={onVote}
                                     onSelectedPost={onSelectPost}
                                     onDeletePost={onDeletePost}

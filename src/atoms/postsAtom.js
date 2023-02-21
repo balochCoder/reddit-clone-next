@@ -4,6 +4,7 @@ export const postState = atom({
     key: 'postState',
     default: {
         selectedPost: null,
-        posts: []
+        posts: [],
+        postVotes:[]
     }
 })

@@ -57,7 +57,7 @@ const UseCommunityData = () => {
 
             const newSnippet = {
                 communityId: communityData.id,
-                imageUrl: communityData.imageUrl || ''
+                imageURL: communityData.imageURL || ''
             }
 
 
