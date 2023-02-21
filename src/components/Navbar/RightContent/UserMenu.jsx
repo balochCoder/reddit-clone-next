@@ -20,12 +20,11 @@ import {communityState} from "@/atoms/communitiesAtom";
 
 
 const UserMenu = ({user}) => {
-    const resetCommunityState = useResetRecoilState(communityState)
     const [signOut, loading, error] = useSignOut(auth);
     const setAuthModalState = useSetRecoilState(authModalState);
     const logout = async () => {
         await signOut();
-        resetCommunityState();
+        // resetCommunityState();
     }
     return (
         <Menu>
