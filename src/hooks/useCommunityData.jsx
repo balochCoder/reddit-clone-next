@@ -6,6 +6,7 @@ import {auth, firestore} from "@/firebase/clientApp";
 
 import {collection, getDocs, writeBatch, doc, increment} from "firebase/firestore";
 import {authModalState} from "@/atoms/authModalAtom";
+import {useRouter} from "next/router";
 
 
 const UseCommunityData = () => {
@@ -14,6 +15,9 @@ const UseCommunityData = () => {
     const setAuthModalState = useSetRecoilState(authModalState);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+
+    const router = useRouter();
+
     const onJoinOrLeaveCommunity = async (communityData, isJoined) => {
         //     is user joined in?
         //     if not open auth model
@@ -110,6 +114,10 @@ const UseCommunityData = () => {
         setLoading(false)
     }
 
+    const getCommunityData = async ()=>{
+
+    }
+
     useEffect(() => {
         if (!user) {
             setCommunityStateValue(prev=>({
@@ -120,6 +128,14 @@ const UseCommunityData = () => {
         }
         getMySnippets()
     }, [user])
+
+    useEffect(()=>{
+        const {communityId} = router.query;
+
+        if (communityId && !communityStateValue.currentCommunity){
+
+        }
+    },[])
     return {
         communityStateValue,
         onJoinOrLeaveCommunity,
