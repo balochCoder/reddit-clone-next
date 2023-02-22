@@ -6,11 +6,14 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "@/firebase/clientApp";
 import {useRecoilValue} from "recoil";
 import {communityState} from "@/atoms/communitiesAtom";
+import useCommunityData from "@/hooks/useCommunityData";
+import About from "@/components/Community/About";
 
 const Submit = () => {
     const [user] = useAuthState(auth);
-    const communityStateValue = useRecoilValue(communityState);
+    // const communityStateValue = useRecoilValue(communityState);
 
+    const {communityStateValue} = useCommunityData();
     return (
         <PageContent>
             <>
@@ -29,7 +32,11 @@ const Submit = () => {
                 }
             </>
             <>
-                AboutComponent
+                {
+                    communityStateValue.currentCommunity && (
+                        <About communityData={communityStateValue.currentCommunity}/>
+                    )
+                }
             </>
         </PageContent>
     );

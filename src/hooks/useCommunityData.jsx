@@ -4,7 +4,7 @@ import {communityState} from "@/atoms/communitiesAtom";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, firestore} from "@/firebase/clientApp";
 
-import {collection, getDocs, writeBatch, doc, increment} from "firebase/firestore";
+import {collection, getDocs, writeBatch, doc, increment, getDoc} from "firebase/firestore";
 import {authModalState} from "@/atoms/authModalAtom";
 import {useRouter} from "next/router";
 
@@ -114,13 +114,23 @@ const UseCommunityData = () => {
         setLoading(false)
     }
 
-    const getCommunityData = async ()=>{
+    const getCommunityData = async (communityId) => {
+        try {
+            const communityDocRef = doc(firestore, 'communities', communityId);
+            const communityDoc = await getDoc(communityDocRef);
 
+            setCommunityStateValue(prev => ({
+                ...prev,
+                currentCommunity: {id: communityDoc.id, ...communityDoc.data()}
+            }))
+        } catch (error) {
+            console.log('getCommunityData error', error)
+        }
     }
 
     useEffect(() => {
         if (!user) {
-            setCommunityStateValue(prev=>({
+            setCommunityStateValue(prev => ({
                 ...prev,
                 mySnippets: []
             }));
@@ -129,13 +139,13 @@ const UseCommunityData = () => {
         getMySnippets()
     }, [user])
 
-    useEffect(()=>{
+    useEffect(() => {
         const {communityId} = router.query;
 
-        if (communityId && !communityStateValue.currentCommunity){
-
+        if (communityId && !communityStateValue.currentCommunity) {
+            getCommunityData(communityId);
         }
-    },[])
+    }, [router.query,communityStateValue.currentCommunity])
     return {
         communityStateValue,
         onJoinOrLeaveCommunity,

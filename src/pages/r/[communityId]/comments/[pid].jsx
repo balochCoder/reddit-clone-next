@@ -8,6 +8,7 @@ import {useRouter} from "next/router";
 import {doc, getDoc} from "firebase/firestore";
 import About from "@/components/Community/About";
 import useCommunityData from "@/hooks/useCommunityData";
+import Comments from "@/components/Posts/Comments/Comments";
 
 const PostPage = () => {
     const [user] = useAuthState(auth);
@@ -50,6 +51,11 @@ const PostPage = () => {
                         />
                     )
                 }
+                <Comments
+                    user={user}
+                    selectedPost={postStateValue.selectedPost}
+                    communityId={postStateValue.selectedPost?.communityId}
+                />
             </>
             <>
                 {
