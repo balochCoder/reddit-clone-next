@@ -1,0 +1,27 @@
+import React from 'react';
+import {Flex, Icon, Image, MenuItem} from "@chakra-ui/react";
+
+const MenuListItem = ({displayText, link, icon, iconColor, imageURL}) => {
+    return (
+        <MenuItem
+            width='100%'
+            fontSize='10pt'
+            _hover={{bg: 'gray.100'}}
+            onClick={() => {
+            }}
+        >
+            <Flex align='center'>
+                {
+                    imageURL ? (
+                        <Image src={imageURL} borderRadius='full' boxSize='18px' mr={2}/>
+                    ) : (
+                        <Icon as={icon} color={iconColor} fontSize={20} mr={2}/>
+                    )
+                }
+                {displayText}
+            </Flex>
+        </MenuItem>
+    );
+};
+
+export default MenuListItem;
