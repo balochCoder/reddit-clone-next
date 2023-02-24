@@ -40,7 +40,7 @@ const Posts = ({communityData}) => {
 
     useEffect(() => {
         getPosts();
-    }, [])
+    }, [communityData])
     return (
         <>
             {

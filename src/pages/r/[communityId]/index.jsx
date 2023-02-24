@@ -23,7 +23,7 @@ const CommunityPage = ({communityData}) => {
             ...prev,
             currentCommunity: communityData
         }))
-    },[]);
+    },[communityData]);
     return (
         <>
             <Header communityData={communityData}/>

@@ -26,7 +26,7 @@ const UsePosts = () => {
     const setAuthModalState = useSetRecoilState(authModalState);
 
     const router = useRouter();
-    const onVote = async (event,post, vote, communityId) => {
+    const onVote = async (event, post, vote, communityId) => {
         //check for user => open model
         event.stopPropagation();
         if (!user?.uid) {
@@ -106,10 +106,10 @@ const UsePosts = () => {
                 postVotes: updatedPostVotes
             }));
 
-            if (postStateValue.selectedPost){
+            if (postStateValue.selectedPost) {
                 setPostStateValue(prev => ({
                     ...prev,
-                   selectedPost: updatedPost
+                    selectedPost: updatedPost
                 }));
             }
 
@@ -125,7 +125,7 @@ const UsePosts = () => {
 
     }
     const onSelectPost = (post) => {
-        setPostStateValue(prev=>({
+        setPostStateValue(prev => ({
             ...prev,
             selectedPost: post
         }));

@@ -8,12 +8,13 @@ import {authModalState} from "@/atoms/authModalAtom";
 import {FaReddit} from "react-icons/fa";
 import {IoImageOutline} from "react-icons/io5";
 import {BsLink45Deg} from "react-icons/bs";
+import useDirectory from "@/hooks/useDirectory";
 
 const CreatePostLink = () => {
     const router = useRouter();
     const [user] = useAuthState(auth);
     const setAuthModalState = useSetRecoilState(authModalState);
-
+    const {toggleMenuOpen} = useDirectory();
 
     const onClick = async ()=>{
         if (!user){
@@ -22,7 +23,11 @@ const CreatePostLink = () => {
         }
 
         const {communityId} = router.query;
-        await router.push(`/r/${communityId}/submit`);
+        if (communityId){
+            router.push(`/r/${communityId}/submit`);
+            return
+        }
+        toggleMenuOpen();
     }
     return (
         <Flex
