@@ -22,6 +22,7 @@ import {
     Text
 } from "@chakra-ui/react";
 import {useRouter} from "next/router";
+import Link from "next/link";
 
 
 const PostItem = ({
@@ -30,7 +31,8 @@ const PostItem = ({
                       onDeletePost,
                       onSelectedPost,
                       userIsCreator,
-                      userVoteValue
+                      userVoteValue,
+                      homePage
                   }) => {
     const [loadingImage, setLoadingImage] = useState(true);
     const [loadingDelete, setLoadingDelete] = useState(false);
@@ -47,7 +49,7 @@ const PostItem = ({
                 throw new Error('Failed to delete post')
             }
 
-            if (singlePostPage){
+            if (singlePostPage) {
                 router.push(`/r/${post.communityId}`)
             }
             console.log('post deleted successfully')
@@ -59,28 +61,28 @@ const PostItem = ({
     return (
         <Flex
             border='1px solid'
-            borderColor={singlePostPage ? 'white': 'gray.300'}
+            borderColor={singlePostPage ? 'white' : 'gray.300'}
             borderRadius={singlePostPage ? '4px 4px 0 0' : '4px'}
             bg='white'
             _hover={{
-                borderColor: singlePostPage ? 'none':'gray.500'
+                borderColor: singlePostPage ? 'none' : 'gray.500'
             }}
-            cursor={singlePostPage ? 'unset':'pointer'}
-            onClick={()=> onSelectedPost && onSelectedPost(post)}
+            cursor={singlePostPage ? 'unset' : 'pointer'}
+            onClick={() => onSelectedPost && onSelectedPost(post)}
         >
             <Flex
                 direction='column'
                 align='center'
-                bg={singlePostPage?'none':'gray.100'}
+                bg={singlePostPage ? 'none' : 'gray.100'}
                 p={2}
                 width='40px'
-                borderRadius={singlePostPage?'0':'3px 0 0 3px'}
+                borderRadius={singlePostPage ? '0' : '3px 0 0 3px'}
             >
                 <Icon
                     as={userVoteValue === 1 ? IoArrowUpCircleSharp : IoArrowUpCircleOutline}
                     color={userVoteValue === 1 ? 'brand.100' : 'gray.400'}
                     fontSize={22}
-                    onClick={(e) => onVote(e,post, 1, post.communityId)}
+                    onClick={(e) => onVote(e, post, 1, post.communityId)}
                     cursor='pointer'
                 />
                 <Text fontSize='9pt'>{post.voteStatus}</Text>
@@ -89,7 +91,7 @@ const PostItem = ({
                     as={userVoteValue === -1 ? IoArrowDownCircleSharp : IoArrowDownCircleOutline}
                     color={userVoteValue === -1 ? '#4379ff' : 'gray.400'}
                     fontSize={22}
-                    onClick={(e) => onVote(e,post, -1, post.communityId)}
+                    onClick={(e) => onVote(e, post, -1, post.communityId)}
                     cursor='pointer'
                 />
             </Flex>
@@ -110,7 +112,38 @@ const PostItem = ({
                 }
                 <Stack spacing={1} p='10px'>
                     <Stack direction='row' spacing={0.6} align='center' fontSize='9pt'>
-                        {/*Home Page Check*/}
+                        {homePage && (
+                            <>
+                                {
+                                    post.communityImageURL ?
+                                        (
+                                            <Image
+                                                src={post.communityImageURL}
+                                                borderRadius='full'
+                                                boxSize='18pt'
+                                                mr={2}
+                                            />
+                                        )
+                                        : (
+                                            <Icon
+                                                as={FaReddit}
+                                                fontSize="18pt"
+                                                mr={1}
+                                                color='blue.500'
+                                            />
+                                        )
+                                }
+                                <Link href={`r/${post.communityId}`}>
+                                    <Text
+                                        fontWeight={700}
+                                        _hover={{textDecoration:'underline'}}
+                                        onClick={(e)=>e.stopPropagation()}
+                                    >{`r/${post.communityId}`}</Text>
+                                </Link>
+                                <Icon as={BsDot} fontSize={8} color='gray.500'/>
+                            </>
+                        )
+                        }
 
                         <Text>Posted by
                             u/{post.creatorDisplayName}{" "} {moment(new Date(post.createdAt?.seconds * 1000)).fromNow()}</Text>

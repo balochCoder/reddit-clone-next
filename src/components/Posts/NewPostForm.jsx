@@ -37,7 +37,7 @@ const formTabs = [
     }
 ]
 
-const NewPostForm = ({user}) => {
+const NewPostForm = ({user, communityImageURL}) => {
     const router = useRouter();
     const [selectedTab, setSelectedTab] = useState(formTabs[0].title);
     const [textInputs, setTextInputs] = useState({
@@ -45,7 +45,7 @@ const NewPostForm = ({user}) => {
         body: ""
     });
 
-    const {setSelectedFile,selectedFile,onSelectFile} = useSelectFile();
+    const {setSelectedFile, selectedFile, onSelectFile} = useSelectFile();
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
 
@@ -54,6 +54,7 @@ const NewPostForm = ({user}) => {
         const newPost = {
             communityId,
             creatorId: user?.uid,
+            communityImageURL: communityImageURL || "",
             creatorDisplayName: user.email.split('@')[0],
             title: textInputs.title,
             body: textInputs.body,

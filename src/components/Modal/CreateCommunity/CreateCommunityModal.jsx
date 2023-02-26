@@ -16,6 +16,8 @@ import {BsFillEyeFill, BsFillPersonFill} from "react-icons/bs";
 import {HiLockClosed} from "react-icons/hi";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, firestore} from "@/firebase/clientApp";
+import {useRouter} from "next/router";
+import useDirectory from "@/hooks/useDirectory";
 
 const CreateCommunityModal = ({open, handleClose}) => {
     const [user] = useAuthState(auth)
@@ -25,6 +27,9 @@ const CreateCommunityModal = ({open, handleClose}) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const router = useRouter();
+
+    const {toggleMenuOpen} = useDirectory();
     const handleChange = (e) => {
 
         if (e.target.value.length > 21) return;
@@ -77,8 +82,10 @@ const CreateCommunityModal = ({open, handleClose}) => {
                         isModerator: true
                     }
                 );
-            })
-
+            });
+            handleClose();
+            toggleMenuOpen();
+            router.push(`r/${communityName}`);
 
         } catch (error) {
             console.log('handleCreateCommunity error', error);

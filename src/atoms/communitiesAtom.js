@@ -4,6 +4,7 @@ export const communityState = atom({
     key: "communitiesState",
     default: {
         mySnippets:[],
-        currentCommunity: null
+        currentCommunity: null,
+        snippetsFetched: false
     }
 })
